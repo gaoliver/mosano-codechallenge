@@ -12,17 +12,17 @@ interface person {
 interface countries {
   name: string
 }
-// interface birthday {
-//   day: number;
-//   month: number;
-//   year: number
-// }
+interface birthday {
+  day: number;
+  month: number;
+  year: number
+}
 interface users {
   id: number;
   name: string;
   surname: string;
   country: string;
-  birthday: string
+  birthday: string;
 }
 
 export default function App() {
@@ -30,7 +30,7 @@ export default function App() {
   const [countries, setCountries] = useState<[countries]>()
   const [theCountry, setTheCountry] = useState("")
   const [birthday, setBirthday] = useState("")
-  // const [dates, setDates] = useState<birthday>()
+  const [theDate, setTheDate] = useState<birthday>()
   const [users, setUsers] = useState<users[]>([])
 
   useEffect(() => {
@@ -42,6 +42,27 @@ export default function App() {
     return str.replace(/[^0-9]/g, "").replace(/(\d{2})(\d{2})(\d)/, "$1/$2/$3")
   }
 
+  const splitDate = () => {
+    const separate = birthday.split("/", 3)
+    
+    const day = separate[0];
+    const month = separate[1];
+    const year = separate[2];
+
+    setTheDate({
+      day: parseInt(day),
+      month: parseInt(month),
+      year: parseInt(year)
+    })
+    
+    console.log("dia: " + day + "\nMês: " + month + "\nAno: " + year)
+  }
+
+  const saving = async () => {
+    await splitDate();
+    saveUser()
+  }
+
   function saveUser() {
     if (person && theCountry && birthday) {
 
@@ -49,7 +70,8 @@ export default function App() {
         id: Math.random(),
         ...person,
         country: theCountry,
-        birthday: birthday
+        birthday: birthday,
+        date: theDate
       }])
 
       console.log(users)
@@ -65,6 +87,7 @@ export default function App() {
       <Container className="App-header">
         <Row>
           <Col lg="5">
+            {/* Nome */}
             <Row className="label">
               <Col>
                 Name:
@@ -73,6 +96,7 @@ export default function App() {
                 <Input placeholder="name here" value={person?.name} onChange={(text) => setPerson({ name: text.target.value, surname: person?.surname || "" })}></Input>
               </Col>
             </Row>
+            {/* Sobrenome */}
             <Row className="label">
               <Col>
                 Surname:
@@ -81,6 +105,7 @@ export default function App() {
                 <Input placeholder="name here" value={person?.surname} onChange={(text) => setPerson({ name: person?.name || "", surname: text.target.value })}></Input>
               </Col>
             </Row>
+            {/* País */}
             <Row className="label">
               <Col>
                 Country:
@@ -94,6 +119,7 @@ export default function App() {
                 </select>
               </Col>
             </Row>
+            {/* Aniversário */}
             <Row className="label">
               <Col>
                 Birthday:
@@ -102,8 +128,9 @@ export default function App() {
                 <Input placeholder="dd/mm/yyyy" maxLength={10} value={maskBirthday(birthday)} onChange={(text) => setBirthday(maskBirthday(text.target.value))}></Input>
               </Col>
             </Row>
+            {/* Botão salvar */}
             <Row className="button">
-              <button onClick={() => saveUser()}>Save</button>
+              <button onClick={() => saving()}>Save</button>
             </Row>
           </Col>
           <Col>
