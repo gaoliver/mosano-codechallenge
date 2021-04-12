@@ -14,11 +14,11 @@
 }
 
 .webPage {
-    background-color: rgb(210, 228, 233);
+    background-color: #ddd;
     display: flex;
     border: 0;
     margin: 0 !important;
-    height: 100vh
+    min-height: 100vh;
 }
 
 .App-header {
@@ -31,28 +31,65 @@
 
 .button {
     width: 100%;
-    justify-content: right;
+    text-align: right;
     margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.button button {
+    background-color: #fff5;
+    border: 2px solid blue;
+    padding: 5px 30px 5px 30px;
+    color: blue;
+}
+
+.footer {
+    width: 100%;
+    text-align: end;
+    margin-top: -10px;
 }
 
 .label {
     margin-top: 10px;
 }
 
+.form-control {
+    border: 2px solid blue !important;
+    border-radius: 0 !important;
+}
+
 select {
-    width: 100%;
+    width: 80%;
+    border: 2px solid blue;
+    padding: 5px 5px;
+    appearance: none;
 }
 
-Table {
-    border: solid 1px blue;
+.selector {
+    float: right;
+    width: 20%;
+    height: 100%;
+    border: 2px solid blue;
+    border-left: 0;
+    background-color: #fffa;
 }
 
-tr {
+table {
+    border: solid 2px blue;
+    height: 350px;
+}
+
+td,
+th {
     border-top: 0 !important;
+    border-bottom: 0 !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle !important;
 }
 
 .listNames:hover {
-    cursor: pointer
+    cursor: pointer;
 }
 
 .App-link {

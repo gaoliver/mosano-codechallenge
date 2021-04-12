@@ -28,10 +28,11 @@ export default function App() {
   const [birthday, setBirthday] = useState<Date>()
   const [users, setUsers] = useState<users[]>([])
   const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+    "July", "August", "September", "October", "November", "December"
+  ];
   const [message, setMessage] = useState("")
 
+  // Get Countries API
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then((response) => setCountries(response.data))
@@ -41,6 +42,7 @@ export default function App() {
     saveUser()
   }
 
+  // Save function
   function saveUser() {
     if (person && theCountry && birthday) {
 
@@ -58,6 +60,7 @@ export default function App() {
 
       console.log(users)
 
+      // Clear inputs
       setPerson({ name: "", surname: "" })
       setBirthday(new Date())
 
@@ -66,6 +69,7 @@ export default function App() {
     }
   }
 
+  // Message when click
   const getMessage = (personId: number) => {
     const person = users.find(user => user.id === personId)
 
@@ -83,7 +87,7 @@ export default function App() {
                 Name:
               </Col>
               <Col>
-                <Input placeholder="name here" value={person?.name} onChange={(text) => setPerson({ name: text.target.value, surname: person?.surname || "" })}></Input>
+                <Input placeholder="name here" name="fname" value={person?.name} onChange={(text) => setPerson({ name: text.target.value, surname: person?.surname || "" })}></Input>
               </Col>
             </Row>
             {/* Sobrenome */}
@@ -92,7 +96,7 @@ export default function App() {
                 Surname:
               </Col>
               <Col>
-                <Input placeholder="name here" value={person?.surname} onChange={(text) => setPerson({ name: person?.name || "", surname: text.target.value })}></Input>
+                <Input placeholder="name here" name="lname" value={person?.surname} onChange={(text) => setPerson({ name: person?.name || "", surname: text.target.value })}></Input>
               </Col>
             </Row>
             {/* País */}
@@ -102,11 +106,13 @@ export default function App() {
               </Col>
               <Col>
                 <select value={theCountry !== "" ? theCountry : undefined} onChange={(text) => setTheCountry(text.target.value)}>
-                  <option disabled selected hidden>Countries</option>
-                  {countries?.map(x => (
-                    <option value={x.name}>{x.name}</option>
+                  <option disabled value="" selected hidden>Countries</option>
+                  {countries?.map((x, index) => (
+                    <option key={index} value={x.name}>{x.name}</option>
                   ))}
                 </select>
+                <div className="selector" onClick={() => {alert("Ok")}}>
+                </div>
               </Col>
             </Row>
             {/* Aniversário */}
@@ -119,16 +125,17 @@ export default function App() {
               </Col>
             </Row>
             {/* Botão salvar */}
-            <Row className="button">
+            <div className="button">
               <button onClick={() => saving()}>Save</button>
-            </Row>
+            </div>
+            {/* Message for user */}
             <Row>
               {message &&
                 (<p>{message}</p>)}
             </Row>
           </Col>
           <Col>
-            <Table hover>
+            <Table responsive hover>
               <thead>
                 <tr>
                   <th>name</th>
@@ -137,8 +144,8 @@ export default function App() {
                 </tr>
               </thead>
               <tbody>
-                {users?.map(user => (
-                  <tr className="listNames" onClick={() => getMessage(user.id)}>
+                {users?.map((user, index) => (
+                  <tr key={index} className="listNames" onClick={() => getMessage(user.id)}>
                     <td>{user.name + " " + user.surname}</td>
                     <td>{user.country}</td>
                     <td>{user.birthday}</td>
@@ -146,6 +153,8 @@ export default function App() {
                 ))}
               </tbody>
             </Table>
+            {/* Footer signature */}
+            <div className="footer">Gabriel Ramos</div>
           </Col>
         </Row>
       </Container>
