@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Row, Container, Col, Table } from "react-bootstrap"
 import { Input, Jumbotron } from "reactstrap"
 import axios from "axios"
 
+import { FaCaretDown } from "react-icons/fa"
 import './App.css';
 
 interface person {
@@ -31,6 +32,9 @@ export default function App() {
     "July", "August", "September", "October", "November", "December"
   ];
   const [message, setMessage] = useState("")
+
+  // References
+  const selectRef = useRef(null)
 
   // Get Countries API
   useEffect(() => {
@@ -83,16 +87,16 @@ export default function App() {
           <Col lg="5">
             {/* Nome */}
             <Row className="label">
-              <Col>
+              <Col lg="4">
                 Name:
               </Col>
               <Col>
-                <Input placeholder="name here" name="fname" value={person?.name} onChange={(text) => setPerson({ name: text.target.value, surname: person?.surname || "" })}></Input>
+                <Input color="#00Fd" placeholder="name here" name="fname" value={person?.name} onChange={(text) => setPerson({ name: text.target.value, surname: person?.surname || "" })}></Input>
               </Col>
             </Row>
             {/* Sobrenome */}
             <Row className="label">
-              <Col>
+              <Col lg="4">
                 Surname:
               </Col>
               <Col>
@@ -101,23 +105,24 @@ export default function App() {
             </Row>
             {/* País */}
             <Row className="label">
-              <Col>
+              <Col lg="4">
                 Country:
               </Col>
               <Col>
-                <select value={theCountry !== "" ? theCountry : undefined} onChange={(text) => setTheCountry(text.target.value)}>
+                <select ref={selectRef} id="select" value={theCountry !== "" ? theCountry : undefined} onChange={(text) => setTheCountry(text.target.value)}>
                   <option disabled value="" selected hidden>Countries</option>
                   {countries?.map((x, index) => (
                     <option key={index} value={x.name}>{x.name}</option>
                   ))}
                 </select>
-                <div className="selector" onClick={() => {alert("Ok")}}>
+                <div className="selector" onClick={() => { document.getElementById("select")?.click() }}>
+                  <FaCaretDown />
                 </div>
               </Col>
             </Row>
             {/* Aniversário */}
             <Row className="label">
-              <Col>
+              <Col lg="4">
                 Birthday:
               </Col>
               <Col>
@@ -128,10 +133,11 @@ export default function App() {
             <div className="button">
               <button onClick={() => saving()}>Save</button>
             </div>
-            {/* Message for user */}
+            {/* Message for user:
+            There is no animation because there is no database fetching*/}
             <Row>
               {message &&
-                (<p>{message}</p>)}
+                (<span>{message}</span>)}
             </Row>
           </Col>
           <Col>
