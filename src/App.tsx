@@ -5,17 +5,12 @@ import axios from "axios"
 
 import './App.css';
 
-interface person { 
-  name: string; 
-  surname: string 
+interface person {
+  name: string;
+  surname: string
 }
 interface countries {
   name: string
-}
-interface birthday {
-  day: number;
-  month: number;
-  year: number
 }
 interface users {
   id: number;
@@ -23,63 +18,55 @@ interface users {
   surname: string;
   country: string;
   birthday: string;
+  date: Date
 }
 
 export default function App() {
   const [person, setPerson] = useState<person>()
   const [countries, setCountries] = useState<[countries]>()
   const [theCountry, setTheCountry] = useState("")
-  const [birthday, setBirthday] = useState("")
-  const [theDate, setTheDate] = useState<birthday>()
+  const [birthday, setBirthday] = useState<Date>()
   const [users, setUsers] = useState<users[]>([])
+  const [message, setMessage] = useState("")
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then((response) => setCountries(response.data))
   }, [])
 
-  function maskBirthday(str: string) {
-    return str.replace(/[^0-9]/g, "").replace(/(\d{2})(\d{2})(\d)/, "$1/$2/$3")
-  }
-
-  const splitDate = () => {
-    const separate = birthday.split("/", 3)
-    
-    const day = separate[0];
-    const month = separate[1];
-    const year = separate[2];
-
-    setTheDate({
-      day: parseInt(day),
-      month: parseInt(month),
-      year: parseInt(year)
-    })
-    
-    console.log("dia: " + day + "\nMês: " + month + "\nAno: " + year)
-  }
-
   const saving = async () => {
-    await splitDate();
     saveUser()
   }
 
   function saveUser() {
     if (person && theCountry && birthday) {
 
+      const theId = Math.round(Math.random() * 100)
+
+      console.log(theId)
+
       setUsers((dados) => [...dados, {
-        id: Math.random(),
+        id: theId,
         ...person,
         country: theCountry,
-        birthday: birthday,
-        date: theDate
+        birthday: (birthday.getUTCDate() < 10 ? "0" + birthday.getUTCDate().toString() : birthday.getUTCDate().toString()) + "/" + ((birthday.getUTCMonth() + 1) < 10 ? "0" + (birthday.getUTCMonth() + 1).toString() : (birthday.getUTCMonth() + 1).toString()) + "/" + birthday.getFullYear().toString(),
+        date: birthday
       }])
 
       console.log(users)
 
+      getMessage(theId)
+
       setPerson({ name: "", surname: "" })
       setTheCountry("")
-      setBirthday("")
+      setBirthday(new Date())
     }
+  }
+
+  const getMessage = (personId: number) => {
+    const person = users.find(user => user.id === personId)
+
+    setMessage(`Hello ${person?.name} from ${person?.country}`)
   }
 
   return (
@@ -125,12 +112,16 @@ export default function App() {
                 Birthday:
               </Col>
               <Col>
-                <Input placeholder="dd/mm/yyyy" maxLength={10} value={maskBirthday(birthday)} onChange={(text) => setBirthday(maskBirthday(text.target.value))}></Input>
+                <Input type="date" onChange={(date) => setBirthday(new Date(date.target.value))} />
               </Col>
             </Row>
             {/* Botão salvar */}
             <Row className="button">
               <button onClick={() => saving()}>Save</button>
+            </Row>
+            <Row>
+              {message &&
+                (<p>{message}</p>)}
             </Row>
           </Col>
           <Col>
@@ -144,12 +135,12 @@ export default function App() {
               </thead>
               <tbody>
                 {users?.map(user => (
-                    <tr>
-                      <td>{user.name + " " + user.surname}</td>
-                      <td>{user.country}</td>
-                      <td>{user.birthday}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td>{user.name + " " + user.surname}</td>
+                    <td>{user.country}</td>
+                    <td>{user.birthday}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </Col>
