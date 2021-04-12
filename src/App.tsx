@@ -27,6 +27,9 @@ export default function App() {
   const [theCountry, setTheCountry] = useState("")
   const [birthday, setBirthday] = useState<Date>()
   const [users, setUsers] = useState<users[]>([])
+  const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
   const [message, setMessage] = useState("")
 
   useEffect(() => {
@@ -55,19 +58,20 @@ export default function App() {
 
       console.log(users)
 
-      getMessage(theId)
-
       setPerson({ name: "", surname: "" })
       setTheCountry("")
       setBirthday(new Date())
+
+      // Message | I did this way because this project have no back-end and redux for realtime update of the array
+      setMessage(`Hello ${person.name} from ${theCountry}, on ${birthday.getUTCDate().toString()} of ${monthNames[birthday.getUTCMonth()]} you will have ${(new Date().getUTCFullYear() - birthday.getUTCFullYear()).toString()} years.`)
     }
   }
 
-  const getMessage = (personId: number) => {
-    const person = users.find(user => user.id === personId)
+  // const getMessage = (personId: number) => {
+  //   const person = users.find(user => user.id === personId)
 
-    setMessage(`Hello ${person?.name} from ${person?.country}`)
-  }
+  //   setMessage(`Hello ${person?.name} from ${person?.country}`)
+  // }
 
   return (
     <Jumbotron className="webPage">
