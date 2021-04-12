@@ -46,7 +46,6 @@
 .footer {
     width: 100%;
     text-align: end;
-    margin-top: -10px;
 }
 
 .label {
@@ -64,10 +63,9 @@
 }
 
 select {
-    width: 80%;
+    width: 100%;
     border: 2px solid blue;
     padding: 5px 5px;
-    appearance: none;
 }
 
 select:first-child {
@@ -107,7 +105,7 @@ span {
     }
 }
 
-table {
+.tableCont {
     border: solid 2px blue;
     height: 400px;
 }
@@ -115,10 +113,11 @@ table {
 td,
 th {
     border-top: 0 !important;
-    border-bottom: 0 !important;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    vertical-align: middle !important;
+    border-bottom: 1px solid #aaa8;
+}
+
+.table thead th {
+    border-bottom: 1px solid #aaa8 !important;
 }
 
 .listNames:hover {

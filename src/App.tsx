@@ -3,7 +3,6 @@ import { Row, Container, Col, Table } from "react-bootstrap"
 import { Input, Jumbotron } from "reactstrap"
 import axios from "axios"
 
-import { FaCaretDown } from "react-icons/fa"
 import './App.css';
 
 interface person {
@@ -58,7 +57,7 @@ export default function App() {
         id: theId,
         ...person,
         country: theCountry,
-        birthday: (birthday.getUTCDate() < 10 ? "0" + birthday.getUTCDate().toString() : birthday.getUTCDate().toString()) + "/" + ((birthday.getUTCMonth() + 1) < 10 ? "0" + (birthday.getUTCMonth() + 1).toString() : (birthday.getUTCMonth() + 1).toString()) + "/" + birthday.getFullYear().toString(),
+        birthday: ((birthday.getUTCMonth() + 1) < 10 ? "0" + (birthday.getUTCMonth() + 1).toString() : (birthday.getUTCMonth() + 1).toString()) + "/" + (birthday.getUTCDate() < 10 ? "0" + birthday.getUTCDate().toString() : birthday.getUTCDate().toString()) + "/" + birthday.getFullYear().toString(),
         date: birthday
       }])
 
@@ -115,9 +114,6 @@ export default function App() {
                     <option key={index} value={x.name}>{x.name}</option>
                   ))}
                 </select>
-                <div className="selector" onClick={() => { document.getElementById("select")?.click() }}>
-                  <FaCaretDown />
-                </div>
               </Col>
             </Row>
             {/* Aniversário */}
@@ -126,7 +122,7 @@ export default function App() {
                 Birthday:
               </Col>
               <Col>
-                <Input type="date" onChange={(date) => setBirthday(new Date(date.target.value))} />
+                <Input type="date" max="2020-12-31" onChange={(date) => setBirthday(new Date(date.target.value))} />
               </Col>
             </Row>
             {/* Botão salvar */}
@@ -141,24 +137,26 @@ export default function App() {
             </Row>
           </Col>
           <Col>
-            <Table responsive hover>
-              <thead>
-                <tr>
-                  <th>name</th>
-                  <th>country</th>
-                  <th>birthday</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users?.map((user, index) => (
-                  <tr key={index} className="listNames" onClick={() => getMessage(user.id)}>
-                    <td>{user.name + " " + user.surname}</td>
-                    <td>{user.country}</td>
-                    <td>{user.birthday}</td>
+            <div className="tableCont">
+              <Table className="testando" responsive hover>
+                <thead>
+                  <tr>
+                    <th>name</th>
+                    <th>country</th>
+                    <th>birthday</th>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
+                </thead>
+                <tbody>
+                  {users?.map((user, index) => (
+                    <tr key={index} className="listNames" onClick={() => getMessage(user.id)}>
+                      <td>{user.name + " " + user.surname}</td>
+                      <td>{user.country}</td>
+                      <td>{user.birthday}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
             {/* Footer signature */}
             <div className="footer">Gabriel Ramos</div>
           </Col>
