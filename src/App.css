@@ -43,6 +43,18 @@ select {
     width: 100%;
 }
 
+Table {
+    border: solid 1px blue;
+}
+
+tr {
+    border-top: 0 !important;
+}
+
+.listNames:hover {
+    cursor: pointer
+}
+
 .App-link {
     color: #61dafb;
 }

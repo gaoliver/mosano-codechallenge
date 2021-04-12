@@ -59,7 +59,6 @@ export default function App() {
       console.log(users)
 
       setPerson({ name: "", surname: "" })
-      setTheCountry("")
       setBirthday(new Date())
 
       // Message | I did this way because this project have no back-end and redux for realtime update of the array
@@ -67,11 +66,11 @@ export default function App() {
     }
   }
 
-  // const getMessage = (personId: number) => {
-  //   const person = users.find(user => user.id === personId)
+  const getMessage = (personId: number) => {
+    const person = users.find(user => user.id === personId)
 
-  //   setMessage(`Hello ${person?.name} from ${person?.country}`)
-  // }
+    setMessage(`Hello ${person?.name} from ${person?.country}, on ${person?.date.getUTCDate().toString()} of ${monthNames[person?.date.getUTCMonth() ? person?.date.getUTCMonth() : 0]} you will have ${(new Date().getUTCFullYear() - (person?.date.getUTCFullYear() ? person?.date.getUTCFullYear() : 0)).toString()} years.`)
+  }
 
   return (
     <Jumbotron className="webPage">
@@ -129,17 +128,17 @@ export default function App() {
             </Row>
           </Col>
           <Col>
-            <Table striped bordered hover>
+            <Table hover>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Country</th>
-                  <th>Birthday</th>
+                  <th>name</th>
+                  <th>country</th>
+                  <th>birthday</th>
                 </tr>
               </thead>
               <tbody>
                 {users?.map(user => (
-                  <tr>
+                  <tr className="listNames" onClick={() => getMessage(user.id)}>
                     <td>{user.name + " " + user.surname}</td>
                     <td>{user.country}</td>
                     <td>{user.birthday}</td>
